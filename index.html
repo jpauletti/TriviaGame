@@ -10,10 +10,41 @@
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1>How well do you know the Harry Potter series?</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <a href="#" class="btn btn-lg btn-primary" id="start-btn">Start</a>
+            </div>
+        </div>
+
+        <div class="row hide" id="timer-section">
+            <div class="col-md-12">
+                <p>Time Remaining: <span id="timer">00:30</span></p>
+            </div>
+        </div>
+
+        <div class="row hide" id="question-section">
+            <div class="col-md-12">
+                <h3 id="question">Which creatures pull the carriages that take students from the Hogwarts Express to the Castle?</h3>
+                <p class="possible-answer">Hippogriffs</p>
+                <p class="possible-answer">Thestrals</p>
+                <p class="possible-answer">Centaurs</p>
+                <p class="possible-answer">Manticores</p>
+            </div>
+        </div>
+
+    </div> <!-- end container -->
     
 
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="assets/javascript/game.js"></script>
+    <script src="assets/javascript/app.js"></script>
 </body>
 </html>
