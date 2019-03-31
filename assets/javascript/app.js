@@ -69,11 +69,11 @@ var app = {
         },
         {
             question: "How does Harry breathe underwater for the second task of the Triwizard Tournament?",
-            choices: ["He transfigures himself", "He used the bubble-head charm", "He eats gillyweed", "He asks the mermen for help"],
+            choices: ["He transfigures himself", "He uses the bubble-head charm", "He eats gillyweed", "He asks the mermen for help"],
             answer: "He eats gillyweed"
         },
         {
-            question: "What does O.W.L. stand for?",
+            question: "What does O.W.L. stand for?", // NEWTS
             choices: ["Official Wizarding Levels", "Outstanding Wizard Learning", "Outstanding Wonderful Luck", "Ordinary Wizarding Level"],
             answer: "Ordinary Wizarding Level"
         },
@@ -93,6 +93,10 @@ var app = {
             answer: "Dentists"
         }
     ],
+
+    rightGifs: ["https://media.giphy.com/media/qLHzYjlA2FW8g/giphy.gif", "https://media.giphy.com/media/qU3ygbyBm0ynC/giphy.gif", "https://media.giphy.com/media/12c664V5sG9OaQ/giphy.gif", "https://media.giphy.com/media/VwUquCGtIatGg/giphy.gif"],
+
+    wrongGifs: ["https://media.giphy.com/media/14gESmcGjeqSZO/giphy.gif", "https://media.giphy.com/media/mlPUJrMgkEays/giphy.gif", "https://media.giphy.com/media/GD8ypYfe6WnBu/giphy.gif", "https://media.giphy.com/media/13wZTPmMABczcs/giphy.gif", "https://media.giphy.com/media/sMxMzHzea6g3m/giphy.gif", "https://media.giphy.com/media/83LWb2PshIJ5C/giphy.gif"],
 
     convertTime: function (t) {
         var minutes = Math.floor(t / 60);
@@ -136,23 +140,19 @@ var app = {
             app.$endScreen.addClass("hide");
         }
 
-        if (app.trivia.length === 0) { // if all questions have been answered
-            // update progress bar
-            app.$progress.children().css("width", app.percent + "%");
-            app.$progress.children().text(app.percent + "%");
 
+        if (app.trivia.length === 0) { // if all questions have been answered
             app.endScreen();
+
         } else {
             // show questions, answers, and timer - hide start button & message area
             app.$timerSection.removeClass("hide");
             app.$questionSection.removeClass("hide");
             app.$message.addClass("hide");
-            app.$startBtn.addClass("hide");
+            app.$startBtn.parent().parent().addClass("hide");
 
             // show progress bar
             app.$progress.removeClass("hide");
-            app.$progress.children().css("width", app.percent + "%");
-            app.$progress.children().text(app.percent + "%");
 
             // reset timer
             app.time = 30;
@@ -214,6 +214,10 @@ var app = {
         // percentage for progress bar
         app.percent += (100 / app.numOfQuestions);
 
+        // update progress bar
+        app.$progress.children().css("width", app.percent + "%");
+        app.$progress.children().text(app.percent + "%");
+
         // check user picked an answer & if that was the right answer
         if (app.$chosenAnswer !== "" && app.$chosenAnswer.text() === app.currentAnswer) {
             // if right
@@ -225,7 +229,8 @@ var app = {
 
             // follow up screen display
             app.$rwMessage.text("Brilliant!");
-            app.$imgMessage.attr("src", "https://media.giphy.com/media/qLHzYjlA2FW8g/giphy.gif");
+            var random = Math.floor(Math.random() * app.rightGifs.length);
+            app.$imgMessage.attr("src", app.rightGifs[random]);
 
             // hold screen for 5 seconds, then go to next question
             app.nextQuestion = setTimeout(app.startGame, 5000);
@@ -246,12 +251,16 @@ var app = {
 
 
             // follow up screen display
-            app.$rwMessage.text("Bollocks!");
-            app.$imgMessage.attr("src", "https://media.giphy.com/media/14gESmcGjeqSZO/giphy.gif");
+            app.$rwMessage.text("Bugger!"); // Bollocks ? // Bugger ? // Bloody hell ?
+            var random = Math.floor(Math.random() * app.wrongGifs.length);
+            app.$imgMessage.attr("src", app.wrongGifs[random]);
 
             // hold screen for 5 seconds, then go to next question
             app.nextQuestion = setTimeout(app.startGame, 5000);
         }
+
+        // reset chosen answer each time so it can tell if unanswered
+        app.$chosenAnswer = "";
     },
 
     endScreen: function () {
@@ -264,9 +273,10 @@ var app = {
         // show end screen section
         app.$endScreen.removeClass("hide");
         // pull right, wrong, unanswered #s
-        app.$right.text(app.right);
-        app.$wrong.text(app.wrong);
-        app.$unanswered.text(app.unanswered);
+        app.$right.text(app.right + "/" + app.numOfQuestions);
+        app.$wrong.text(app.wrong + "/" + app.numOfQuestions);
+        app.$unanswered.text(app.unanswered + "/" + app.numOfQuestions);
+
     }
 
 
@@ -290,9 +300,6 @@ $(document).ready(function () {
     });
 
 
-
-
-
     // click answer
     app.$possibleAnswers.on("click", function() {
         console.log("clicked answer");
@@ -302,10 +309,6 @@ $(document).ready(function () {
         app.answerScreen();
 
     });
-
-    if (app.trivia.length === 0) {
-        console.log("all questions answered");
-    }
 
 
     app.$startOverBtn.on("click", function() {
