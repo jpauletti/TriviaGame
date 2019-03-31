@@ -17,6 +17,10 @@
             <div class="col-md-12">
                 <h1>Harry Potter Trivia</h1>
                 <h4>How well do you know the Harry Potter series?</h4>
+                <div class="progress hide mt-4">
+                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0"
+                        aria-valuemax="100">0%</div>
+                </div>
             </div>
         </div>
 
@@ -49,8 +53,19 @@
         <div class="row message hide">
             <div class="col-md-12">
                 <h3 id="right-wrong-message">Bollocks!</h3>
-                <p id="right-answer-is">The Correct Answer was:</p>
+                <p>The Correct Answer was: <span id="right-answer-is"></span></p>
                 <img id="img-message" src="https://giphy.com/embed/14gESmcGjeqSZO" />
+            </div>
+        </div>
+
+<!-- End Screen Section -->
+        <div class="row end-screen hide">
+            <div class="col-md-12">
+                <h3 class="mb-4">Here's how you did:</h3>
+                <p>Correct Answers: <span id="right"></span></p>
+                <p>Incorrect Answers: <span id="wrong"></span></p>
+                <p>Unanswered Answers: <span id="unanswered"></span></p>
+                <a href="#" class="btn btn-lg btn-primary mt-2" id="start-over-btn">Start over?</a>
             </div>
         </div>
 

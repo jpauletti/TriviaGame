@@ -1,46 +1,11 @@
 // using JavaScript for the logic and jQuery to manipulate HTML.Be sure to layout this app with valid HTML and stylish CSS.
 
-
-// click start button to begin
-
-// timer at top - like class exervise - set interval with count function, also need converter to show it on the page
-
 // change page content to the ? and 4 answers to choose from - selected answer is marked
     // user can only select one answer
-    // if wrong, say wrong and show correct answer for about 5 seconds
-    // if right, say right 
-    // if time runs out, say so - similar to if wrong
-    // automatically goes to next question after 5 seconds
 
-// each question gets 30 sec or whatever time
-
-// at end - shows time remaining
-    // shows how you did - correct answers, incorrect answers, and unanswered
-    // start over button - resets game
 
 
 var app = {
-    $startBtn: $("#start-btn"),
-    $timerSection: $("#timer-section"),
-    $timer: $("#timer"),
-    $questionSection: $("#question-section"),
-    $question: $("#question"),
-    $possibleAnswers: $(".possible-answer"),
-    $chosenAnswer: "",
-
-    $message: $(".message"),
-    $rwMessage: $("#right-wrong-message"),
-    $rightAnswer: $("#right-answer-is"),
-    $imgMessage: $("#img-message"),
-
-    time: 30,
-    intervalTimer: "",
-
-    currentQuestion: "",
-    currentChoices: "",
-    currentAnswer: "",
-    usedQuestions: [],
-
     trivia: [
         {
             question: "Which creatures pull the carriages that take students from the Hogwarts Express to the Castle?",
@@ -80,7 +45,7 @@ var app = {
         {
             question: "What is the name of Filch's cat?",
             choices: ["Buttercup", "Mrs. Filch", "Mrs. Norris", "Ser Pounce"],
-            answer: "Ordinary Wizarding Level"
+            answer: "Mrs. Norris"
         },
         {
             question: 'Which other boy might have ended up as the "Chosen One?"',
@@ -93,6 +58,42 @@ var app = {
             answer: "Dentists"
         }
     ],
+
+
+    $startBtn: $("#start-btn"),
+    $timerSection: $("#timer-section"),
+    $timer: $("#timer"),
+    $progress: $(".progress"),
+    $questionSection: $("#question-section"),
+    $question: $("#question"),
+    $possibleAnswers: $(".possible-answer"),
+    $chosenAnswer: "",
+
+    $message: $(".message"),
+    $rwMessage: $("#right-wrong-message"),
+    $rightAnswer: $("#right-answer-is"),
+    $imgMessage: $("#img-message"),
+
+    time: 30,
+    intervalTimer: "",
+    nextQuestion: "",
+    numOfQuestions: "",
+    percent: 0,
+
+    currentQuestion: "",
+    currentChoices: "",
+    currentAnswer: "",
+    usedQuestions: [],
+
+    right: 0,
+    wrong: 0,
+    unanswered: 0,
+
+    $endScreen: $(".end-screen"),
+    $right: $("#right"),
+    $wrong: $("#wrong"),
+    $unanswered: $("#unanswered"),
+    $startOverBtn: $("#start-over-btn"),
 
     convertTime: function (t) {
         var minutes = Math.floor(t / 60);
@@ -118,21 +119,52 @@ var app = {
 
         // update time on page
         app.$timer.text(app.convertTime(app.time));
-        // update time on page
-        app.$timer.text(app.convertTime(app.time));
 
         // stop interval at 00:00
         if (app.time === 0) {
-            clearInterval(intervalTimer);
+            clearInterval(app.intervalTimer);
             console.log("clear interval");
+            app.answerScreen();
         }
     },
 
     startGame: function () {
-        intervalTimer = setInterval(app.count, 1000); // counts every second
-        console.log("game started");
+        if (app.trivia.length === app.numOfQuestions) {
+            app.percent = 0;
+            app.$progress.children().css("width", app.percent + "%");
+            app.$progress.children().text(app.percent + "%");
 
-        app.loadQuestion();
+            app.$endScreen.addClass("hide");
+        }
+
+        if (app.trivia.length === 0) { // if all questions have been answered
+            // update progress bar
+            app.$progress.children().css("width", app.percent + "%");
+            app.$progress.children().text(app.percent + "%");
+
+            app.endScreen();
+        } else {
+            // show questions, answers, and timer - hide start button & message area
+            app.$timerSection.removeClass("hide");
+            app.$questionSection.removeClass("hide");
+            app.$message.addClass("hide");
+            app.$startBtn.addClass("hide");
+
+            // show progress bar
+            app.$progress.removeClass("hide");
+            app.$progress.children().css("width", app.percent + "%");
+            app.$progress.children().text(app.percent + "%");
+
+            // reset timer
+            app.time = 30;
+            app.$timer.text(app.convertTime(app.time));
+
+            app.intervalTimer = setInterval(app.count, 1000); // counts every second
+            console.log("game started");
+
+            app.loadQuestion();
+        }
+        
 
     },
 
@@ -149,7 +181,7 @@ var app = {
         console.log(app.currentAnswer);
 
         // add question to new array of asked questions
-        app.usedQuestions = app.trivia.slice(randomNumber, randomNumber + 1);
+        app.usedQuestions.push(app.trivia.slice(randomNumber, randomNumber + 1));
 
         // remove that question from the array (at index of randomNumber, 1 item to remove)
         app.trivia.splice(randomNumber, 1);
@@ -166,6 +198,78 @@ var app = {
 
     },
 
+    answerScreen: function () {
+        // stop timer
+        clearInterval(app.intervalTimer);
+        console.log("clear interval");
+
+        // hide question area
+        app.$questionSection.addClass("hide");
+
+        // show message area
+        app.$message.removeClass("hide");
+
+        // show correct answer
+        app.$rightAnswer.text(app.currentAnswer);
+
+        // percentage for progress bar
+        app.percent += (100 / app.numOfQuestions);
+
+        // check user picked an answer & if that was the right answer
+        if (app.$chosenAnswer !== "" && app.$chosenAnswer.text() === app.currentAnswer) {
+            // if right
+            console.log("that's right");
+
+            // add 1 to # of right answers
+            app.right++;
+            console.log("right: " + app.right);
+
+            // follow up screen display
+            app.$rwMessage.text("Brilliant!");
+            app.$imgMessage.attr("src", "https://media.giphy.com/media/qLHzYjlA2FW8g/giphy.gif");
+
+            // hold screen for 5 seconds, then go to next question
+            app.nextQuestion = setTimeout(app.startGame, 5000);
+
+        } else {
+            // if wrong or not answered
+            console.log("that's wrong");
+
+            if (app.$chosenAnswer === "") { // you didn't answer
+                // add 1 to # of unanswered answers
+                app.unanswered++;
+                console.log("unanswered: " + app.unanswered);
+            } else { // you got it wrong
+                // add 1 to # of wrong answers
+                app.wrong++;
+                console.log("wrong: " + app.wrong);
+            }
+
+
+            // follow up screen display
+            app.$rwMessage.text("Bollocks!");
+            app.$imgMessage.attr("src", "https://media.giphy.com/media/14gESmcGjeqSZO/giphy.gif");
+
+            // hold screen for 5 seconds, then go to next question
+            app.nextQuestion = setTimeout(app.startGame, 5000);
+        }
+    },
+
+    endScreen: function () {
+        // hide timer
+        app.$timerSection.addClass("hide");
+
+        // hide message area
+        app.$message.addClass("hide");
+
+        // show end screen section
+        app.$endScreen.removeClass("hide");
+        // pull right, wrong, unanswered #s
+        app.$right.text(app.right);
+        app.$wrong.text(app.wrong);
+        app.$unanswered.text(app.unanswered);
+    }
+
 
 };
 
@@ -178,11 +282,8 @@ $(document).ready(function () {
     // start button
     app.$startBtn.on("click", function() {
         console.log("clicked");
+        app.numOfQuestions = app.trivia.length; // save initial total number of questions
         app.startGame();
-        // show questions, answers, and timer - hide start button
-        app.$timerSection.removeClass("hide");
-        app.$questionSection.removeClass("hide");
-        $(this).addClass("hide");
 
         console.log(app.currentAnswer);
 
@@ -194,47 +295,27 @@ $(document).ready(function () {
 
 
     // click answer
-    app.$possibleAnswers.on("click", function () {
+    app.$possibleAnswers.on("click", function() {
         console.log("clicked answer");
         app.$chosenAnswer = $(this);
+        console.log(app.$chosenAnswer);
 
-        // add selected class
-        // $(this).addClass("selected");
-
-        // stop timer
-        clearInterval(intervalTimer);
-        console.log("clear interval");
-
-        // hide question area
-        app.$questionSection.addClass("hide");
-
-        // show message area
-        app.$message.removeClass("hide");
-
-        // show correct answer
-        app.$rightAnswer.text("The correct answer was: " + app.currentAnswer);
-
-        // check if that was the right answer
-        if ($(this).text() === app.currentAnswer) {
-            // if right
-            console.log("that's right");
-
-            // follow up screen display
-            app.$rwMessage.text("Brilliant!");
-            app.$imgMessage.attr("src", "https://media.giphy.com/media/qLHzYjlA2FW8g/giphy.gif");
-
-        } else {
-            // if wrong
-            console.log("that's wrong");
-
-            // follow up screen display
-            app.$rwMessage.text("Bollocks!");
-            app.$imgMessage.attr("src", "https://media.giphy.com/media/14gESmcGjeqSZO/giphy.gif");
-        }
+        app.answerScreen();
 
     });
 
+    if (app.trivia.length === 0) {
+        console.log("all questions answered");
+    }
 
+
+    app.$startOverBtn.on("click", function() {
+        // move array of questions already used back to reg array, clear already used array
+        app.trivia = app.usedQuestions;
+        app.usedQuestions = [];
+        // start over game
+        app.startGame();
+    });
 
 
 }); // document.ready end
