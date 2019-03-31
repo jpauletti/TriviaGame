@@ -26,13 +26,19 @@ var app = {
     $questionSection: $("#question-section"),
     $question: $("#question"),
     $possibleAnswers: $(".possible-answer"),
+    $chosenAnswer: "",
+
+    $message: $(".message"),
+    $rwMessage: $("#right-wrong-message"),
+    $rightAnswer: $("#right-answer-is"),
+    $imgMessage: $("#img-message"),
 
     time: 30,
     intervalTimer: "",
 
     currentQuestion: "",
     currentChoices: "",
-    currentCorrectAnswer: "",
+    currentAnswer: "",
     usedQuestions: [],
 
     trivia: [
@@ -131,7 +137,7 @@ var app = {
     },
 
     loadQuestion: function () {
-        var randomNumber = Math.floor(Math.random() * app.trivia.length) + 1;
+        var randomNumber = Math.floor(Math.random() * app.trivia.length);
         console.log(randomNumber);
 
         // get random question & answers
@@ -167,13 +173,70 @@ var app = {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
+$(document).ready(function () {
 
-app.$startBtn.on("click", function() {
-    console.log("clicked");
-    app.startGame();
-    // show questions, answers, and timer - hide start button
-    app.$timerSection.removeClass("hide");
-    app.$questionSection.removeClass("hide");
-    $(this).addClass("hide");
-})
+    // start button
+    app.$startBtn.on("click", function() {
+        console.log("clicked");
+        app.startGame();
+        // show questions, answers, and timer - hide start button
+        app.$timerSection.removeClass("hide");
+        app.$questionSection.removeClass("hide");
+        $(this).addClass("hide");
+
+        console.log(app.currentAnswer);
+
+
+    });
+
+
+
+
+
+    // click answer
+    app.$possibleAnswers.on("click", function () {
+        console.log("clicked answer");
+        app.$chosenAnswer = $(this);
+
+        // add selected class
+        // $(this).addClass("selected");
+
+        // stop timer
+        clearInterval(intervalTimer);
+        console.log("clear interval");
+
+        // hide question area
+        app.$questionSection.addClass("hide");
+
+        // show message area
+        app.$message.removeClass("hide");
+
+        // show correct answer
+        app.$rightAnswer.text("The correct answer was: " + app.currentAnswer);
+
+        // check if that was the right answer
+        if ($(this).text() === app.currentAnswer) {
+            // if right
+            console.log("that's right");
+
+            // follow up screen display
+            app.$rwMessage.text("Brilliant!");
+            app.$imgMessage.attr("src", "https://media.giphy.com/media/qLHzYjlA2FW8g/giphy.gif");
+
+        } else {
+            // if wrong
+            console.log("that's wrong");
+
+            // follow up screen display
+            app.$rwMessage.text("Bollocks!");
+            app.$imgMessage.attr("src", "https://media.giphy.com/media/14gESmcGjeqSZO/giphy.gif");
+        }
+
+    });
+
+
+
+
+}); // document.ready end
+
 

@@ -8,3 +8,25 @@
 .hide {
     display: none;
 }
+
+.possible-answer {
+    padding: 5px;
+    margin-bottom: 0.25rem;
+}
+
+.possible-answer:hover {
+    background: purple;
+    color: white;
+    cursor: pointer;
+}
+
+.selected {
+    
+}
+
+#timer-section {
+    /* position: fixed;
+    top: 0;
+    right: 0;
+    padding: 10px; */
+}

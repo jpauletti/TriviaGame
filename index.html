@@ -10,33 +10,47 @@
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container text-center mt-5">
 
+<!-- Title -->
         <div class="row">
             <div class="col-md-12">
-                <h1>How well do you know the Harry Potter series?</h1>
+                <h1>Harry Potter Trivia</h1>
+                <h4>How well do you know the Harry Potter series?</h4>
             </div>
         </div>
 
-        <div class="row">
+<!-- Button -->
+        <div class="row mt-5">
             <div class="col-md-12">
                 <a href="#" class="btn btn-lg btn-primary" id="start-btn">Start</a>
             </div>
         </div>
 
+<!-- Timer -->
         <div class="row hide" id="timer-section">
             <div class="col-md-12">
                 <p>Time Remaining: <span id="timer">00:30</span></p>
             </div>
         </div>
 
-        <div class="row hide" id="question-section">
+<!-- Question Area -->
+        <div class="row hide mt-4" id="question-section">
             <div class="col-md-12">
                 <h3 id="question">Which creatures pull the carriages that take students from the Hogwarts Express to the Castle?</h3>
                 <p class="possible-answer">Hippogriffs</p>
                 <p class="possible-answer">Thestrals</p>
                 <p class="possible-answer">Centaurs</p>
                 <p class="possible-answer">Manticores</p>
+            </div>
+        </div>
+
+<!-- Right / Wrong follow up -->
+        <div class="row message hide">
+            <div class="col-md-12">
+                <h3 id="right-wrong-message">Bollocks!</h3>
+                <p id="right-answer-is">The Correct Answer was:</p>
+                <img id="img-message" src="https://giphy.com/embed/14gESmcGjeqSZO" />
             </div>
         </div>
 
