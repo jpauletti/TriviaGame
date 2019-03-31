@@ -6,6 +6,41 @@
 
 
 var app = {
+    $startBtn: $("#start-btn"),
+    $timerSection: $("#timer-section"),
+    $timer: $("#timer"),
+    $progress: $(".progress"),
+    $questionSection: $("#question-section"),
+    $question: $("#question"),
+    $possibleAnswers: $(".possible-answer"),
+    $chosenAnswer: "",
+
+    $message: $(".message"),
+    $rwMessage: $("#right-wrong-message"),
+    $rightAnswer: $("#right-answer-is"),
+    $imgMessage: $("#img-message"),
+
+    time: 30,
+    intervalTimer: "",
+    nextQuestion: "",
+    numOfQuestions: "",
+    percent: 0,
+
+    currentQuestion: "",
+    currentChoices: "",
+    currentAnswer: "",
+    usedQuestions: [],
+
+    right: 0,
+    wrong: 0,
+    unanswered: 0,
+
+    $endScreen: $(".end-screen"),
+    $right: $("#right"),
+    $wrong: $("#wrong"),
+    $unanswered: $("#unanswered"),
+    $startOverBtn: $("#start-over-btn"),
+
     trivia: [
         {
             question: "Which creatures pull the carriages that take students from the Hogwarts Express to the Castle?",
@@ -58,42 +93,6 @@ var app = {
             answer: "Dentists"
         }
     ],
-
-
-    $startBtn: $("#start-btn"),
-    $timerSection: $("#timer-section"),
-    $timer: $("#timer"),
-    $progress: $(".progress"),
-    $questionSection: $("#question-section"),
-    $question: $("#question"),
-    $possibleAnswers: $(".possible-answer"),
-    $chosenAnswer: "",
-
-    $message: $(".message"),
-    $rwMessage: $("#right-wrong-message"),
-    $rightAnswer: $("#right-answer-is"),
-    $imgMessage: $("#img-message"),
-
-    time: 30,
-    intervalTimer: "",
-    nextQuestion: "",
-    numOfQuestions: "",
-    percent: 0,
-
-    currentQuestion: "",
-    currentChoices: "",
-    currentAnswer: "",
-    usedQuestions: [],
-
-    right: 0,
-    wrong: 0,
-    unanswered: 0,
-
-    $endScreen: $(".end-screen"),
-    $right: $("#right"),
-    $wrong: $("#wrong"),
-    $unanswered: $("#unanswered"),
-    $startOverBtn: $("#start-over-btn"),
 
     convertTime: function (t) {
         var minutes = Math.floor(t / 60);

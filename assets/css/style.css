@@ -1,5 +1,50 @@
+body {
+    background: url(../images/ravenclaw2.jpg);
+    background-size: cover;
+}
 
+.container {
+    background: #bcbcbc;
+    /* color: white; */
+}
 
+h1 {
+    color: #946a2c;
+}
+
+h4 {
+    color: #212f5b;
+}
+
+.progress {
+    background-color: #d4d4d4;
+}
+
+.progress-bar {
+    background-color: #212f5b;
+}
+
+.btn-primary {
+    background-color: #844c00;
+    border-color: #844c00;
+}
+
+.btn-primary:hover {
+    background-color: #2291ab;
+    border-color: #2291ab;
+}
+
+#timer-section {
+    font-weight: bold;
+    color: #946a2c;
+    opacity: 0.85;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+#timer-section span {
+    margin-right: 8px;
+}
 
 
 
@@ -10,23 +55,27 @@
 }
 
 .possible-answer {
-    padding: 5px;
+    padding: 10px;
     margin-bottom: 0.25rem;
 }
 
 .possible-answer:hover {
-    background: purple;
+    background: #212f5b;
     color: white;
     cursor: pointer;
 }
 
-.selected {
-    
-}
 
 #timer-section {
     /* position: fixed;
     top: 0;
     right: 0;
     padding: 10px; */
+}
+
+
+@media screen and (max-width: 480px) {
+    .possible-answer {
+        padding: 15px;
+    }
 }
