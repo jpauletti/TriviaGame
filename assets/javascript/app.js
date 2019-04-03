@@ -73,7 +73,7 @@ var app = {
             answer: "He eats gillyweed"
         },
         {
-            question: "What does O.W.L. stand for?", // NEWTS
+            question: "What does O.W.L. stand for?",
             choices: ["Official Wizarding Levels", "Outstanding Wizard Learning", "Outstanding Wonderful Luck", "Ordinary Wizarding Level"],
             answer: "Ordinary Wizarding Level"
         },
@@ -180,10 +180,13 @@ var app = {
         console.log(app.currentAnswer);
 
         // add question to new array of asked questions
-        app.usedQuestions.push(app.trivia.slice(randomNumber, randomNumber + 1));
+        app.usedQuestions.push(app.trivia[randomNumber]);
 
         // remove that question from the array (at index of randomNumber, 1 item to remove)
         app.trivia.splice(randomNumber, 1);
+
+        console.log("trivia: " + app.trivia);
+        console.log("used: " + app.usedQuestions); // adds an extra object around the whole thing
 
         // add question to page
         app.$question.text(app.currentQuestion);
@@ -192,7 +195,7 @@ var app = {
         $.each(app.$possibleAnswers, function(index, value) {
             console.log(index);
             console.log(value);
-            value.textContent = app.currentChoices[index];            
+            value.textContent = app.currentChoices[index]; 
         })
 
     },
@@ -313,8 +316,18 @@ $(document).ready(function () {
 
     app.$startOverBtn.on("click", function() {
         // move array of questions already used back to reg array, clear already used array
+        console.log("before: " + app.trivia);
+        console.log("before: " + app.usedQuestions);
         app.trivia = app.usedQuestions;
+        console.log("after: " + app.trivia);
         app.usedQuestions = [];
+        console.log("after: " + app.usedQuestions);
+
+        // reset wins count
+        app.right = 0;
+        app.wrong = 0;
+        app.unanswered = 0;
+
         // start over game
         app.startGame();
     });
