@@ -17,6 +17,7 @@ var app = {
 
     $message: $(".message"),
     $rwMessage: $("#right-wrong-message"),
+    $rightAnswerP: $("#correct-answer-p"),
     $rightAnswer: $("#right-answer-is"),
     $imgMessage: $("#img-message"),
 
@@ -212,7 +213,7 @@ var app = {
         app.$message.removeClass("hide");
 
         // show correct answer
-        app.$rightAnswer.text(app.currentAnswer);
+        // app.$rightAnswer.text(app.currentAnswer);
 
         // percentage for progress bar
         app.percent += (100 / app.numOfQuestions);
@@ -242,19 +243,27 @@ var app = {
             // if wrong or not answered
             console.log("that's wrong");
 
+            // show correct answer
+            app.$rightAnswerP.removeClass("hide");
+            app.$rightAnswer.text(app.currentAnswer);
+
+
             if (app.$chosenAnswer === "") { // you didn't answer
                 // add 1 to # of unanswered answers
                 app.unanswered++;
+
+                // follow up screen display
+                app.$rwMessage.text("Time's Up!");
                 console.log("unanswered: " + app.unanswered);
             } else { // you got it wrong
                 // add 1 to # of wrong answers
                 app.wrong++;
+
+                // follow up screen display
+                app.$rwMessage.text("Bugger!"); // Bollocks ? // Bugger ? // Bloody hell ?
                 console.log("wrong: " + app.wrong);
             }
 
-
-            // follow up screen display
-            app.$rwMessage.text("Bugger!"); // Bollocks ? // Bugger ? // Bloody hell ?
             var random = Math.floor(Math.random() * app.wrongGifs.length);
             app.$imgMessage.attr("src", app.wrongGifs[random]);
 
@@ -293,7 +302,6 @@ $(document).ready(function () {
 
     // start button
     app.$startBtn.on("click", function() {
-        console.log("clicked");
         app.numOfQuestions = app.trivia.length; // save initial total number of questions
         app.startGame();
 
@@ -305,7 +313,6 @@ $(document).ready(function () {
 
     // click answer
     app.$possibleAnswers.on("click", function() {
-        console.log("clicked answer");
         app.$chosenAnswer = $(this);
         console.log(app.$chosenAnswer);
 
