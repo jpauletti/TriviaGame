@@ -1,10 +1,5 @@
 // using JavaScript for the logic and jQuery to manipulate HTML.Be sure to layout this app with valid HTML and stylish CSS.
 
-// change page content to the ? and 4 answers to choose from - selected answer is marked
-    // user can only select one answer
-
-
-
 var app = {
     $startBtn: $("#start-btn"),
     $timerSection: $("#timer-section"),
@@ -151,6 +146,7 @@ var app = {
             app.$questionSection.removeClass("hide");
             app.$message.addClass("hide");
             app.$startBtn.parent().parent().addClass("hide");
+            app.$rightAnswerP.addClass("hide");
 
             // show progress bar
             app.$progress.removeClass("hide");
@@ -170,15 +166,11 @@ var app = {
 
     loadQuestion: function () {
         var randomNumber = Math.floor(Math.random() * app.trivia.length);
-        console.log(randomNumber);
 
         // get random question & answers
         app.currentQuestion = app.trivia[randomNumber].question;
         app.currentChoices = app.trivia[randomNumber].choices;
         app.currentAnswer = app.trivia[randomNumber].answer;
-        console.log(app.currentQuestion);
-        console.log(app.currentChoices);
-        console.log(app.currentAnswer);
 
         // add question to new array of asked questions
         app.usedQuestions.push(app.trivia[randomNumber]);
@@ -186,16 +178,11 @@ var app = {
         // remove that question from the array (at index of randomNumber, 1 item to remove)
         app.trivia.splice(randomNumber, 1);
 
-        console.log("trivia: " + app.trivia);
-        console.log("used: " + app.usedQuestions); // adds an extra object around the whole thing
-
         // add question to page
         app.$question.text(app.currentQuestion);
 
         // add each possible answer to page
         $.each(app.$possibleAnswers, function(index, value) {
-            console.log(index);
-            console.log(value);
             value.textContent = app.currentChoices[index]; 
         })
 
@@ -204,16 +191,12 @@ var app = {
     answerScreen: function () {
         // stop timer
         clearInterval(app.intervalTimer);
-        console.log("clear interval");
 
         // hide question area
         app.$questionSection.addClass("hide");
 
         // show message area
         app.$message.removeClass("hide");
-
-        // show correct answer
-        // app.$rightAnswer.text(app.currentAnswer);
 
         // percentage for progress bar
         app.percent += (100 / app.numOfQuestions);
@@ -305,16 +288,12 @@ $(document).ready(function () {
         app.numOfQuestions = app.trivia.length; // save initial total number of questions
         app.startGame();
 
-        console.log(app.currentAnswer);
-
-
     });
 
 
     // click answer
     app.$possibleAnswers.on("click", function() {
         app.$chosenAnswer = $(this);
-        console.log(app.$chosenAnswer);
 
         app.answerScreen();
 
@@ -322,13 +301,9 @@ $(document).ready(function () {
 
 
     app.$startOverBtn.on("click", function() {
-        // move array of questions already used back to reg array, clear already used array
-        console.log("before: " + app.trivia);
-        console.log("before: " + app.usedQuestions);
+        // move array of questions already used back to reg array, clear already used questions array
         app.trivia = app.usedQuestions;
-        console.log("after: " + app.trivia);
         app.usedQuestions = [];
-        console.log("after: " + app.usedQuestions);
 
         // reset wins count
         app.right = 0;
